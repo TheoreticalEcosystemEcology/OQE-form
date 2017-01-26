@@ -1,0 +1,23 @@
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+#map {
+    height: 100vh !important;
+    width: 100%;
+}
+
+.col-sm-4, .col-sm-8 {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+}
+
+.well {
+    margin-bottom: 0px;
+}
+
+h3, h4 {
+  font-weight: bold;
+}
