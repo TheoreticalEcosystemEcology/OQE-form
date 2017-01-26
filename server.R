@@ -64,9 +64,11 @@ shinyServer(function(input, output, session) {
         rec$form[1, 6] <- input$context
         rec$form[1, 7:19] <- taxa_ref %in% input$taxa
         rec$form[1, 20:23] <- type_ref %in% input$type
-        rec$form[1, 24:26] <- enviro_ref %in% input$enviro
-        rec$form[1, 27] <- input$share
-        rec$form[1, 28:38] <- db_ref %in% input$db
+        rec$form[1, 24] <- as.character(input$autres_spec_type)
+        rec$form[1, 25:27] <- enviro_ref %in% input$enviro
+        rec$form[1, 28] <- input$share
+        rec$form[1, 29:39] <- db_ref %in% input$db
+        rec$form[1, 40] <- as.character(input$autres_spec_db)
 
         # Liste des réponses
         response <- list(form=rec$form,map=rec$map)
@@ -108,10 +110,9 @@ shinyServer(function(input, output, session) {
           markerOptions = FALSE, editOptions = FALSE,
           polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
 
-      # On update responses$res
-      responses$res[[rv$page]] <<- response()
+     shinyjs::disable("formulaire")
 
-    })
+     })
 
 
     ######### NEXT button behaviour
@@ -136,8 +137,7 @@ shinyServer(function(input, output, session) {
             markerOptions = FALSE, editOptions = FALSE,
             polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
 
-        # On update responses$res
-        responses$res[[rv$page]] <<- response()
+        shinyjs::disable("formulaire")
 
       } else if (rv$page == length(responses$res)) {
 
@@ -146,9 +146,8 @@ shinyServer(function(input, output, session) {
         # On réinitialise le formulaire à blanc
         reinit(rec)
 
+        shinyjs::enable("formulaire")
       }
-      print(rv$page)
-
     })
     #
     # ######### ADD button behaviour
@@ -163,7 +162,6 @@ shinyServer(function(input, output, session) {
         responses$res[[rv$page]] <<- response()
 
       }
-
       # On ajoute +1 au compteur de page
       rv$page <- rv$page + 1
 

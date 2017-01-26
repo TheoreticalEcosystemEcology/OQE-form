@@ -20,7 +20,7 @@ shinyUI(fluidPage(theme = shinytheme("yeti"),
         HTML("<hr width='75%'>"),
         h4("Étape 2: Formulaire"),
         p("Veuillez compléter les informations relatives à la campagne d'échantillonage que vous venez de localiser sur la carte.",style="font-style:italic;font-size:13px;"),
-              div(
+              div(useShinyjs(),
                    id = "formulaire",
                     # Campagne d'échantillonnage
                     selectInput("sample", label =  h5("Campagne d'échantillonnage:"),
@@ -30,6 +30,7 @@ shinyUI(fluidPage(theme = shinytheme("yeti"),
                     conditionalPanel(
                       condition = "input.sample == 2",
                       dateRangeInput("yearRange",label = h5("Première et dernière année:"))
+
                   ),
                   conditionalPanel(
                     condition = "input.sample == 2",
@@ -56,10 +57,10 @@ shinyUI(fluidPage(theme = shinytheme("yeti"),
                   # Type de données
                   checkboxGroupInput("type", label = h5("Type de données:"),
                                      choices = list("Occurence" = "occur", "Abondance/Frequence" = "abond",
-                                                    "Données individuelles (Traits, Génétiques)" = "individu", "Autres" = "autres"),inline=TRUE),
+                                                    "Données individuelles (Traits, Génétiques)" = "individu", "Autres" = "autres_type"),inline=TRUE),
                   conditionalPanel(
-                    condition = "$.inArray('autres', input.type) > -1",
-                    textInput("autres_spec", label = h5("Vous avez séléctionné 'Autres', pourriez-vous préciser?"))
+                    condition = "$.inArray('autres_type', input.type) > -1",
+                    textInput("autres_spec_type", label = h5("Vous avez séléctionné 'Autres', pourriez-vous préciser?"))
                   ),
 
                   # Environnement du/des site(s)
@@ -74,11 +75,11 @@ shinyUI(fluidPage(theme = shinytheme("yeti"),
                     checkboxGroupInput("db", label = h5("Si oui, le(s)quel(s)?"),
                                        choices = list("Canadensis/GBIF" = "gbif", "DataONE" = "dataone", "Dryad" = "dryad", "Encyclopedia of Life (EOL)" = "eol",
                                                       "(ESA) data.esa.org" = "esa", "Fig Share" = "fig", "Mangal" = "mangal", "Le Naturaliste" = "naturaliste",
-                                                      "Nordicana D" = "nordi", "Quebio" = "quebio", "Autres" = "autre"),inline=TRUE)),
+                                                      "Nordicana D" = "nordi", "Quebio" = "quebio", "Autres" = "autres_db"),inline=TRUE)),
 
                   conditionalPanel(
-                    condition = "$.inArray('autres', input.db) > -1",
-                    textInput("autres_spec", label = h5("Vous avez séléctionné 'Autres', pourriez-vous préciser?"))
+                    condition = "$.inArray('autres_db', input.db) > -1",
+                    textInput("autres_spec_db", label = h5("Vous avez séléctionné 'Autres', pourriez-vous préciser?"))
                   ),
 
                   textAreaInput("comments",label= h5("Des commentaires/informations supplémentaires sur cette campagne?"),rows = 3)
