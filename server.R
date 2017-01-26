@@ -11,10 +11,10 @@ shinyServer(function(input, output, session) {
 
     ######### GEO DATA #########
 
-    # Créé responses s'il n'existe pas
+    # Créé responses$res s'il n'existe pas
     rec <- reactiveValues(map=list(),form=df)
 
-    if(!exists("responses")) responses <<- list()
+    responses <- reactiveValues(res=list())
 
     output$map <- renderLeaflet({
         leaflet() %>% addProviderTiles("Esri.WorldTopoMap") %>% setView(1010, 54, 5) %>%
@@ -84,8 +84,8 @@ shinyServer(function(input, output, session) {
     # # Disable/enable prev and observe page
     observe({
       toggleState(id = "prev", condition = rv$page > 1)
-      toggleState(id = "nxt", condition = rv$page <= length(responses))
-      toggleState(id="erase",condition = rv$page <= length(responses))
+      toggleState(id = "nxt", condition = rv$page <= length(responses$res))
+      toggleState(id="erase",condition = rv$page <= length(responses$res))
     })
 
     ########### PREVIOUS prev button behaviour
@@ -95,8 +95,8 @@ shinyServer(function(input, output, session) {
       rv$page <- rv$page - 1
 
       # On met à jour les données
-      rec$map <- responses[[rv$page]]$map
-      rec$form <- responses[[rv$page]]$form
+      rec$map <- responses$res[[rv$page]]$map
+      rec$form <- responses$res[[rv$page]]$form
 
       # On update le form
       updateForm(rec$form)
@@ -108,8 +108,8 @@ shinyServer(function(input, output, session) {
           markerOptions = FALSE, editOptions = FALSE,
           polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
 
-      # On update responses
-      responses[[rv$page]] <<- response()
+      # On update responses$res
+      responses$res[[rv$page]] <<- response()
 
     })
 
@@ -117,14 +117,14 @@ shinyServer(function(input, output, session) {
     ######### NEXT button behaviour
     observeEvent(input$nxt, {
 
-      if(rv$page < length(responses)){
+      if(rv$page < length(responses$res)){
 
         # On change la page
         rv$page <- rv$page + 1
 
         # On met à jour les données
-        rec$map <- responses[[rv$page]]$map
-        rec$form <- responses[[rv$page]]$form
+        rec$map <- responses$res[[rv$page]]$map
+        rec$form <- responses$res[[rv$page]]$form
 
         # On update le form
         updateForm(rec$form)
@@ -136,10 +136,10 @@ shinyServer(function(input, output, session) {
             markerOptions = FALSE, editOptions = FALSE,
             polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
 
-        # On update responses
-        responses[[rv$page]] <<- response()
+        # On update responses$res
+        responses$res[[rv$page]] <<- response()
 
-      } else if (rv$page == length(responses)) {
+      } else if (rv$page == length(responses$res)) {
 
         rv$page <- rv$page + 1
 
@@ -147,6 +147,7 @@ shinyServer(function(input, output, session) {
         reinit(rec)
 
       }
+      print(rv$page)
 
     })
     #
@@ -155,11 +156,11 @@ shinyServer(function(input, output, session) {
     observeEvent(input$add, {
 
     # s'il n'y a pas d'enregistrements
-      if (length(responses) == 0) {
-        responses[[1]] <<- response()
+      if (length(responses$res) == 0) {
+        responses$res[[1]] <<- response()
       } else {
         # On ajoute les données
-        responses[[rv$page]] <<- response()
+        responses$res[[rv$page]] <<- response()
 
       }
 
@@ -174,19 +175,33 @@ shinyServer(function(input, output, session) {
     # ########### ERASE FORM
     observeEvent(input$erase, {
       if(rv$page>1){
-        responses[[rv$page]] <<- NULL
+        responses$res[[rv$page]] <<- NULL
         rv$page <- rv$page - 1
 
         # On met à jour les données
-        rec$map <- responses[[rv$page]]$map
-        rec$form <- responses[[rv$page]]$form
+        rec$map <- responses$res[[rv$page]]$map
+        rec$form <- responses$res[[rv$page]]$form
 
         # On update le form
         updateForm(rec$form)
       } else {
-
-        responses[[rv$page]] <<- NULL
+        if (length(responses$res) > 1) {
+          responses$res[[rv$page]] <<- NULL
+          reinit(rec)
+          rec$map <- responses$res[[rv$page]]$map
+          rec$form <- responses$res[[rv$page]]$form
+          updateForm(rec$form)
+          leafletProxy("map") %>%
+          addGeoJSON(rec$map) %>%
+          addDrawToolbar(polygonOptions =  FALSE,
+              markerOptions = FALSE, editOptions = FALSE,
+              polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
+          }
+          else {
+        responses$res[[rv$page]] <<- NULL
         reinit(rec)
+          }
+        }
 
         # On reinit la map comme rv$page change pas
         output$map <- renderLeaflet({
@@ -195,22 +210,21 @@ shinyServer(function(input, output, session) {
                 markerOptions = drawMarkerOptions(), editOptions = editToolbarOptions(),
                 polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
         })
-
-      }
-    })
+        print(length(responses$res))
+      })
 
     output$nCamp <- renderUI({
-      HTML(paste("<p style='font-size:13px;margin-top:10px'> Le nombre de campagnes d'échantillonage enregistrées est de: <b>",length(responses),"</b> </p>"))
+      HTML(paste("<p style='font-size:13px;margin-top:10px'> Le nombre de campagnes d'échantillonage enregistrées est de: <b>",length(responses$res),"</b> </p>"))
     })
 
     # ########### SUBMIT FORM submit form
     observeEvent(input$submit, {
 
       # On ajoute les données
-      responses[[rv$page]] <<- response()
+      responses$res[[rv$page]] <<- response()
 
       # On sauvegarde
-      saveRDS(responses,file=paste0("./data/",format(Sys.time(), "%Y%m%d_%H%M%S_"), "data_set.rds"))
+      saveRDS(responses$res,file=paste0("./data/",format(Sys.time(), "%Y%m%d_%H%M%S_"), "data_set.rds"))
 
 
       ## Déclenche Modal pour demander les infos de la personne si elle a coché qu'elle était interessé à partager les données
