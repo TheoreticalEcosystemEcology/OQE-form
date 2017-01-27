@@ -6,7 +6,7 @@ df <- data.frame(sample = character(), yearBegin = character(), yearEnd = charac
     plantes_nonvasc = logical(), champ = logical(), unicell = logical(), bact = logical(),
     occur = logical(), abond = logical(), individu = logical(), autres_type = logical(),
     autres_spec_type = character(), aqua = logical(), marin = logical(), terre = logical(),
-    share = character(), gbif = logical(), dataone = logical(), dryad = logical(),
+    shared = character(), gbif = logical(), dataone = logical(), dryad = logical(),
     eol = logical(), esa = logical(), fig = logical(), mangal = logical(), naturaliste = logical(),
     nordi = logical(), quebio = logical(), autres_db = logical(), autres_spec_db = character(),
     comments = character(), stringsAsFactors = FALSE)
@@ -70,14 +70,14 @@ updateForm <- function(data) {
         Marin = "marin", Terrestre = "terre"), selected = colnames(data[, which(data[1,
         25:27] == TRUE) + 24]))
 
-    # update share
-    updateRadioButtons(session, "share", choices = list(Oui = 1, Non = 2), selected = data[1,
+    # update shared
+    updateRadioButtons(session, "shared", choices = list(Oui = 1, Non = 2), selected = data[1,
         28])
 
     # update db
     updateCheckboxGroupInput(session, "db", choices = list(`Canadensis/GBIF` = "gbif",
         DataONE = "dataone", Dryad = "dryad", `Encyclopedia of Life (EOL)` = "eol",
-        `(ESA) data.esa.org` = "esa", `Fig Share` = "fig", Mangal = "mangal", `Le Naturaliste` = "naturaliste",
+        `(ESA) data.esa.org` = "esa", `Fig shared` = "fig", Mangal = "mangal", `Le Naturaliste` = "naturaliste",
         `Nordicana D` = "nordi", Quebio = "quebio", Autre = "autres_db"), selected = colnames(data[,
         which(data[1, 29:39] == TRUE) + 28]), inline = TRUE)
 
@@ -86,4 +86,6 @@ updateForm <- function(data) {
 
     # update text area for comments section
     updateTextAreaInput(session, "comments", value = paste(data[1, 41]))
+
+    disable("formulaire")
 }

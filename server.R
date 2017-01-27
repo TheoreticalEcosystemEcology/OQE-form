@@ -1,6 +1,7 @@
 library("shiny")
 library("leaflet")
 library("leaflet.extras")
+library("shinyjs")
 
 
 # add data in the list
@@ -12,40 +13,41 @@ shinyServer(function(input, output, session) {
     ######### GEO DATA #########
 
     # Créé responses$res s'il n'existe pas
-    rec <- reactiveValues(map=list(),form=df)
+    rec <- reactiveValues(map = list(), form = df)
 
-    responses <- reactiveValues(res=list())
+    responses <- reactiveValues(res = list())
 
     output$map <- renderLeaflet({
-        leaflet() %>% addProviderTiles("Esri.WorldTopoMap") %>% setView(1010, 54, 5) %>%
-        addDrawToolbar(targetGroup=rv$page,polygonOptions = drawPolygonOptions(),
+        leaflet() %>% addProviderTiles("Esri.WorldTopoMap") %>% setView(1010, 54,
+            5) %>% addDrawToolbar(targetGroup = rv$page, polygonOptions = drawPolygonOptions(),
             markerOptions = drawMarkerOptions(), editOptions = editToolbarOptions(),
             polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
     })
 
-    observeEvent(input$map_draw_new_feature,{
-      rec$map[[length(rec$map)+1]] <- input$map_draw_new_feature
+    observeEvent(input$map_draw_new_feature, {
+        rec$map[[length(rec$map) + 1]] <- input$map_draw_new_feature
     })
 
     observeEvent(input$map_draw_edited_features, {
 
-      id_edit <- input$map_draw_edited_features$features[[1]]$properties$`_leaflet_id`
+        id_edit <- input$map_draw_edited_features$features[[1]]$properties$`_leaflet_id`
 
-      for(i in 1:length(rec$map)){
-        if(rec$map[[i]]$properties$`_leaflet_id` == id_edit ){
-          rec$map[[i]] <- input$map_draw_edited_features
+        for (i in 1:length(rec$map)) {
+            if (rec$map[[i]]$properties$`_leaflet_id` == id_edit) {
+                rec$map[[i]] <- input$map_draw_edited_features
+            }
         }
-      }
 
     })
 
     observeEvent(input$map_draw_deleted_features, {
 
-      id_edit <- input$map_draw_edited_features$features[[1]]$properties$`_leaflet_id`
+        id_edit <- input$map_draw_edited_features$features[[1]]$properties$`_leaflet_id`
 
-      for(i in 1:length(rep$map)){
-        if(rec$map[[i]]$properties$`_leaflet_id` == id_edit ) rec$map[[i]] <- input$map_draw_edited_features
-      }
+        for (i in 1:length(rep$map)) {
+            if (rec$map[[i]]$properties$`_leaflet_id` == id_edit)
+                rec$map[[i]] <- input$map_draw_edited_features
+        }
 
     })
 
@@ -66,63 +68,36 @@ shinyServer(function(input, output, session) {
         rec$form[1, 20:23] <- type_ref %in% input$type
         rec$form[1, 24] <- as.character(input$autres_spec_type)
         rec$form[1, 25:27] <- enviro_ref %in% input$enviro
-        rec$form[1, 28] <- input$share
+        rec$form[1, 28] <- input$shared
         rec$form[1, 29:39] <- db_ref %in% input$db
         rec$form[1, 40] <- as.character(input$autres_spec_db)
         rec$form[1, 41] <- as.character(input$comments)
 
         # Liste des réponses
-        response <- list(form=rec$form,map=rec$map)
+        response <- list(form = rec$form, map = rec$map)
         response
     })
 
-    # ########### PAGES BEHAVIOUR (PREVIOUS AND NEXT) #########
-    #
-    # # declare page var as reactive La page commence à 1 (Correspond à la page sur
-    # # lequel nous nous trouvons présentement. Donc au départ, on est sur la 1Ã¨re page
-    # # que nous allons remplir)
+    # ########### PAGES BEHAVIOUR (PREVIOUS AND NEXT) ######### # declare page var as
+    # reactive La page commence à 1 (Correspond à la page sur # lequel nous nous
+    # trouvons présentement. Donc au départ, on est sur la 1Ã¨re page # que nous
+    # allons remplir)
 
-    rv <- reactiveValues(page=1)
+    rv <- reactiveValues(page = 1)
 
     # # Disable/enable prev and observe page
     observe({
-      toggleState(id = "prev", condition = rv$page > 1)
-      toggleState(id = "nxt", condition = rv$page <= length(responses$res))
-      toggleState(id="erase",condition = rv$page <= length(responses$res))
+        toggleState(id = "prev", condition = rv$page > 1)
+        toggleState(id = "nxt", condition = rv$page <= length(responses$res))
+        toggleState(id = "erase", condition = rv$page <= length(responses$res))
+        toggleState(id = "formulaire", condition = rv$page > length(responses$res))
     })
 
     ########### PREVIOUS prev button behaviour
     observeEvent(input$prev, {
 
-      # On change la page
-      rv$page <- rv$page - 1
-
-      # On met à jour les données
-      rec$map <- responses$res[[rv$page]]$map
-      rec$form <- responses$res[[rv$page]]$form
-
-      # On update le form
-      updateForm(rec$form)
-
-      # On met à jour la carte
-      leafletProxy("map") %>%
-      addGeoJSON(rec$map) %>%
-      addDrawToolbar(polygonOptions =  FALSE,
-          markerOptions = FALSE, editOptions = FALSE,
-          polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
-
-     shinyjs::disable("formulaire")
-
-     })
-
-
-    ######### NEXT button behaviour
-    observeEvent(input$nxt, {
-
-      if(rv$page < length(responses$res)){
-
         # On change la page
-        rv$page <- rv$page + 1
+        rv$page <- rv$page - 1
 
         # On met à jour les données
         rec$map <- responses$res[[rv$page]]$map
@@ -132,106 +107,142 @@ shinyServer(function(input, output, session) {
         updateForm(rec$form)
 
         # On met à jour la carte
-        leafletProxy("map") %>%
-        addGeoJSON(rec$map) %>%
-        addDrawToolbar(polygonOptions =  FALSE,
-            markerOptions = FALSE, editOptions = FALSE,
-            polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
+        leafletProxy("map") %>% addGeoJSON(rec$map) %>% addDrawToolbar(polygonOptions = FALSE,
+            markerOptions = FALSE, editOptions = FALSE, polylineOptions = FALSE,
+            circleOptions = FALSE, rectangleOptions = FALSE)
 
-        shinyjs::disable("formulaire")
+     })
 
-      } else if (rv$page == length(responses$res)) {
 
+    ######### NEXT button behaviour
+    observeEvent(input$nxt, {
+
+        if (rv$page < length(responses$res)) {
+
+            # On change la page
+            rv$page <- rv$page + 1
+
+            # On met à jour les données
+            rec$map <- responses$res[[rv$page]]$map
+            rec$form <- responses$res[[rv$page]]$form
+
+            # On update le form
+            updateForm(rec$form)
+
+            # On met à jour la carte
+            leafletProxy("map") %>% addGeoJSON(rec$map) %>% addDrawToolbar(polygonOptions = FALSE,
+                markerOptions = FALSE, editOptions = FALSE, polylineOptions = FALSE,
+                circleOptions = FALSE, rectangleOptions = FALSE)
+
+        } else if (rv$page == length(responses$res)) {
+
+            rv$page <- rv$page + 1
+
+            # On réinitialise le formulaire à blanc
+            reinit(rec)
+        }
+    })
+    # ######### ADD button behaviour
+    observeEvent(input$add, {
+
+        # s'il n'y a pas d'enregistrements
+        if (length(responses$res) == 0) {
+            responses$res[[1]] <<- response()
+        } else {
+            # On ajoute les données
+            responses$res[[rv$page]] <<- response()
+
+        }
+        # On ajoute +1 au compteur de page
         rv$page <- rv$page + 1
 
         # On réinitialise le formulaire à blanc
         reinit(rec)
 
-        shinyjs::enable("formulaire")
-      }
-    })
-    #
-    # ######### ADD button behaviour
-    #
-    observeEvent(input$add, {
-
-    # s'il n'y a pas d'enregistrements
-      if (length(responses$res) == 0) {
-        responses$res[[1]] <<- response()
-      } else {
-        # On ajoute les données
-        responses$res[[rv$page]] <<- response()
-
-      }
-      # On ajoute +1 au compteur de page
-      rv$page <- rv$page + 1
-
-      # On réinitialise le formulaire à blanc
-      reinit(rec)
-
     })
 
     # ########### ERASE FORM
     observeEvent(input$erase, {
-      if(rv$page>1){
-        responses$res[[rv$page]] <<- NULL
-        rv$page <- rv$page - 1
+        if (rv$page > 1) {
+            responses$res[[rv$page]] <<- NULL
+            rv$page <- rv$page - 1
 
-        # On met à jour les données
-        rec$map <- responses$res[[rv$page]]$map
-        rec$form <- responses$res[[rv$page]]$form
+            # On met à jour les données
+            rec$map <- responses$res[[rv$page]]$map
+            rec$form <- responses$res[[rv$page]]$form
 
-        # On update le form
-        updateForm(rec$form)
-      } else {
-        if (length(responses$res) > 1) {
-          responses$res[[rv$page]] <<- NULL
-          reinit(rec)
-          rec$map <- responses$res[[rv$page]]$map
-          rec$form <- responses$res[[rv$page]]$form
-          updateForm(rec$form)
-          leafletProxy("map") %>%
-          addGeoJSON(rec$map) %>%
-          addDrawToolbar(polygonOptions =  FALSE,
-              markerOptions = FALSE, editOptions = FALSE,
-              polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
-          }
-          else {
-        responses$res[[rv$page]] <<- NULL
-        reinit(rec)
-          }
+            # On update le form
+            updateForm(rec$form)
+        } else {
+            if (length(responses$res) > 1) {
+                responses$res[[rv$page]] <<- NULL
+                reinit(rec)
+                rec$map <- responses$res[[rv$page]]$map
+                rec$form <- responses$res[[rv$page]]$form
+                updateForm(rec$form)
+                leafletProxy("map") %>% addGeoJSON(rec$map) %>% addDrawToolbar(polygonOptions = FALSE,
+                  markerOptions = FALSE, editOptions = FALSE, polylineOptions = FALSE,
+                  circleOptions = FALSE, rectangleOptions = FALSE)
+            } else {
+                responses$res[[rv$page]] <<- NULL
+                reinit(rec)
+            }
         }
 
         # On reinit la map comme rv$page change pas
         output$map <- renderLeaflet({
-            leaflet() %>% addProviderTiles("Esri.WorldTopoMap") %>% setView(1010, 54, 5) %>%
-            addDrawToolbar(targetGroup=rv$page,polygonOptions = drawPolygonOptions(),
+            leaflet() %>% addProviderTiles("Esri.WorldTopoMap") %>% setView(1010,
+                54, 5) %>% addDrawToolbar(targetGroup = rv$page, polygonOptions = drawPolygonOptions(),
                 markerOptions = drawMarkerOptions(), editOptions = editToolbarOptions(),
                 polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
         })
         print(length(responses$res))
-      })
+    })
 
     output$nCamp <- renderUI({
-      HTML(paste("<p style='font-size:13px;margin-top:10px'> Le nombre de campagnes d'échantillonage enregistrées est de: <b>",length(responses$res),"</b> </p>"))
+        HTML(paste("<p style='font-size:13px;margin-top:10px'> Le nombre de campagnes d'échantillonage enregistrées est de: <b>",
+            length(responses$res), "</b> </p>"))
     })
 
     # ########### SUBMIT FORM submit form
     observeEvent(input$submit, {
 
-      # On ajoute les données
-      responses$res[[rv$page]] <<- response()
+        # On ajoute les données
+        responses$res[[rv$page]] <<- response()
 
-      # On sauvegarde
-      saveRDS(responses$res,file=paste0("./data/",format(Sys.time(), "%Y%m%d_%H%M%S_"), "data_set.rds"))
+        ## Déclenche Modal pour demander les infos de la personne si elle a coché qu'elle
+        ## était interessé à partager les données
+        if (input$share == 1) {
+        showModal(modalDialog(
+          title ="Coordonnées de la personne en charge des données",
+          p("Veuillez remplir les coordonnées de la personne responsable des données."),
+          textInput("name", label = h5("Nom, Prénom")),
+          textInput("adress", label = h5("Adresse")),
+          textInput("telNo", label = h5("Numéro de téléphone")),
+          textInput("email", label = h5("Adresse courriel")),
+          p("Pour quitter, cliquer à l'extérieur de la fenêtre ou appuyer sur Esc."),
+          footer = actionButton("save", class = "btn-success", label = h5("Enregistrer")),
+          easyClose = TRUE
+          ))
 
-
-      ## Déclenche Modal pour demander les infos de la personne si elle a coché qu'elle était interessé à partager les données
-
-      ## Déclenche Modal pour dire que l'info a bien été enregistré.
-
-
-
+        } else {
+          # On sauvegarde
+          saveRDS(responses$res, file = paste0("./data/", format(Sys.time(), "%Y%m%d_%H%M%S_"),
+              "data_set.rds"))
+        }
     })
 
+    # Save coordo and send result
+    observeEvent(input$save, {
+      coordo <- list(name = input$name, adress = input$adress, telNo = input$telNo, email = input$email)
+      final <- list(coordo, responses$res)
+      # On sauvegarde
+      saveRDS(final, file = paste0("./data/", format(Sys.time(), "%Y%m%d_%H%M%S_"),
+          "data_set.rds"))
+      showModal(modalDialog(
+        title = "Confirmation",
+        p("Les informations ont bien été enregistrés"),
+        h5("Merci!")
+      ))
+    })
 })
