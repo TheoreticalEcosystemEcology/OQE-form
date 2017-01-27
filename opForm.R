@@ -9,7 +9,7 @@ df <- data.frame(sample = character(), yearBegin = character(), yearEnd = charac
     share = character(), gbif = logical(), dataone = logical(), dryad = logical(),
     eol = logical(), esa = logical(), fig = logical(), mangal = logical(), naturaliste = logical(),
     nordi = logical(), quebio = logical(), autres_db = logical(), autres_spec_db = character(),
-    stringsAsFactors = FALSE)
+    comments = character(), stringsAsFactors = FALSE)
 
 # Références
 taxa_ref <- colnames(df)[7:19]
@@ -83,4 +83,7 @@ updateForm <- function(data) {
 
     # update text input for "other" option in db
     updateTextInput(session, "autres_db_type", value = paste(data[1, 40]))
+
+    # update text area for comments section
+    updateTextAreaInput(session, "comments", value = paste(data[1, 41]))
 }
