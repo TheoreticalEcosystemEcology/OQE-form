@@ -3,6 +3,7 @@ library("leaflet")
 library("leaflet.extras")
 library("shinyjs")
 
+op <- options(digits.secs=3)
 
 # add data in the list
 shinyServer(function(input, output, session) {
@@ -227,8 +228,14 @@ shinyServer(function(input, output, session) {
 
         } else {
           # On sauvegarde
-          saveRDS(responses$res, file = paste0("./data/", format(Sys.time(), "%Y%m%d_%H%M%S_"),
+          saveRDS(responses$res, file = paste0("./data/", gsub("[.]", "_", format(Sys.time(), "%Y%m%d_%H%M%OS4_")),
               "data_set.rds"))
+          showModal(modalDialog(
+            title = "Confirmation",
+            p("Les informations ont bien été enregistrés"),
+            h5("Merci!")
+          ))
+          responses$res <- list()
         }
     })
 
@@ -237,12 +244,13 @@ shinyServer(function(input, output, session) {
       coordo <- list(name = input$name, adress = input$adress, telNo = input$telNo, email = input$email)
       final <- list(coordo, responses$res)
       # On sauvegarde
-      saveRDS(final, file = paste0("./data/", format(Sys.time(), "%Y%m%d_%H%M%S_"),
+      saveRDS(final, file = paste0("./data/", gsub("[.]", "_", format(Sys.time(), "%Y%m%d_%H%M%OS4_")),
           "data_set.rds"))
       showModal(modalDialog(
         title = "Confirmation",
         p("Les informations ont bien été enregistrés"),
         h5("Merci!")
       ))
+      responses$res <- list()
     })
 })
