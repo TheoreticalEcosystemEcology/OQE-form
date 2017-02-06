@@ -19,7 +19,7 @@ shinyServer(function(input, output, session) {
     responses <- reactiveValues(res = list())
 
     output$map <- renderLeaflet({
-        leaflet() %>% addProviderTiles("Esri.WorldTopoMap") %>% setView(1010, 54,
+        leaflet(options = leafletOptions(worldCopyJump = TRUE)) %>% addProviderTiles("Esri.WorldTopoMap") %>% setView(-71.5, 54,
             5) %>% addDrawToolbar(targetGroup = rv$page, polygonOptions = drawPolygonOptions(),
             markerOptions = drawMarkerOptions(), editOptions = editToolbarOptions(),
             polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
@@ -66,13 +66,19 @@ shinyServer(function(input, output, session) {
         rec$form[1, 5] <- as.character(input$year)
         rec$form[1, 6] <- input$context
         rec$form[1, 7:19] <- taxa_ref %in% input$taxa
-        rec$form[1, 20:23] <- type_ref %in% input$type
-        rec$form[1, 24] <- as.character(input$autres_spec_type)
-        rec$form[1, 25:27] <- enviro_ref %in% input$enviro
-        rec$form[1, 28] <- input$shared
-        rec$form[1, 29:39] <- db_ref %in% input$db
-        rec$form[1, 40] <- as.character(input$autres_spec_db)
-        rec$form[1, 41] <- as.character(input$comments)
+        rec$form[1, 20] <- input$status
+        rec$form[1, 21:25] <- status_ref %in% input$sp_status
+        rec$form[1, 26] <- as.character(input$autres_spec_status)
+        rec$form[1, 27:30] <- type_ref %in% input$type
+        rec$form[1, 31] <- as.character(input$autres_spec_type)
+        rec$form[1, 32:34] <- enviro_ref %in% input$enviro
+        rec$form[1, 35:37] <- finance_ref %in% input$finance
+        rec$form[1, 38] <- as.character(input$autres_spec_finance)
+        rec$form[1, 39] <- as.character(input$doi)
+        rec$form[1, 40] <- input$shared
+        rec$form[1, 41:51] <- db_ref %in% input$db
+        rec$form[1, 52] <- as.character(input$autres_spec_db)
+        rec$form[1, 53] <- as.character(input$comments)
 
         # Liste des réponses
         response <- list(form = rec$form, map = rec$map)
@@ -91,7 +97,6 @@ shinyServer(function(input, output, session) {
         toggleState(id = "prev", condition = rv$page > 1)
         toggleState(id = "nxt", condition = rv$page <= length(responses$res))
         toggleState(id = "erase", condition = rv$page <= length(responses$res))
-        toggleState(id = "formulaire", condition = rv$page > length(responses$res))
     })
 
     ########### PREVIOUS prev button behaviour
@@ -103,7 +108,6 @@ shinyServer(function(input, output, session) {
         # On met à jour les données
         rec$map <- responses$res[[rv$page]]$map
         rec$form <- responses$res[[rv$page]]$form
-
         # On update le form
         updateForm(rec$form)
 
@@ -113,7 +117,6 @@ shinyServer(function(input, output, session) {
             circleOptions = FALSE, rectangleOptions = FALSE)
 
      })
-
 
     ######### NEXT button behaviour
     observeEvent(input$nxt, {
@@ -152,7 +155,6 @@ shinyServer(function(input, output, session) {
         } else {
             # On ajoute les données
             responses$res[[rv$page]] <<- response()
-
         }
         # On ajoute +1 au compteur de page
         rv$page <- rv$page + 1
@@ -197,7 +199,6 @@ shinyServer(function(input, output, session) {
                 markerOptions = drawMarkerOptions(), editOptions = editToolbarOptions(),
                 polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
         })
-        print(length(responses$res))
     })
 
     output$nCamp <- renderUI({

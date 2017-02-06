@@ -2,7 +2,6 @@ library("shiny")
 library("leaflet")
 library("shinyjs")
 library("shinythemes")
-library("shinyBS")
 
 
 shinyUI(fluidPage
@@ -30,9 +29,9 @@ shinyUI(fluidPage
                       h4("Étape 2: Formulaire"),
                       p("Veuillez compléter les informations relatives à la campagne d'échantillonage que vous venez de localiser sur la carte.",style="font-style:italic;font-size:13px;"),
                       div(id = "formulaire",
-                          # Campagne d'échantillonnage
-                          selectInput("sample", label =  h5("Campagne d'échantillonnage:"),
-                                      choices = list("Ponctuelle" = 1, "Récurrente" = 2)),
+                      # Campagne d'échantillonnage
+                      selectInput("sample", label =  h5("Campagne d'échantillonnage:"),
+                                  choices = list("Ponctuelle" = 1, "Récurrente" = 2)),
 
                       # Année d'échantillonnage (dateRange or date)
                       conditionalPanel(
@@ -62,17 +61,17 @@ shinyUI(fluidPage
                                                         "Organismes unicellulaires" = "unicell", "Bactéries" = "bact"), inline=TRUE),
 
                       # Espèces à statut
-                      radioButtons("statut", label = h5("Avez-vous échantillonné une ou plusieurs espèces ayant un statut particulier?"),
+                      radioButtons("status", label = h5("Avez-vous échantillonné une ou plusieurs espèces ayant un statut particulier?"),
                                    choices = list("Oui" = 1, "Non" = 0), selected = 0, inline=TRUE),
 
                       conditionalPanel(
-                        condition = "input.statut == 1",
-                        checkboxGroupInput("sp_statut", label = h5("Quel est ce statut?"),
-                                           choices = list("Préoccupante" = "preoccupante", "Menacée" = "menacee", "En voie de disparition" = "voie_disp", "Espèces d'importance commerciale" = "commerciale", "Autre" = "autre_statut"), inline = TRUE)
+                        condition = "input.status == 1",
+                        checkboxGroupInput("sp_status", label = h5("Quel est ce statut?"),
+                                           choices = list("Préoccupante" = "preoccupante", "Menacée" = "menacee", "En voie de disparition" = "voie_disp", "Espèces d'importance commerciale" = "commerciale", "Autres" = "autres_status"), inline = TRUE)
                         ),
                       conditionalPanel(
-                        condition = "$.inArray('autre_statut', input.sp_statut) > -1",
-                        textInput("autre_spec_statut", label = h5("Vous avez sélectionné 'Autre', veuillez préciser"))
+                        condition = "$.inArray('autres_status', input.sp_status) > -1",
+                        textInput("autres_spec_status", label = h5("Vous avez sélectionné 'Autres', veuillez préciser"))
                         ),
 
                       # Type de données
@@ -100,7 +99,7 @@ shinyUI(fluidPage
                          ),
 
                       # DOI
-                      textInput("doi", label = h5("DOI de l'article ou des données liés à cette campagne:", label = p("Si vous avez plusieurs DOI, séparez les d'un point-virgule"))),
+                      textInput("doi", label = h5("DOI de l'article ou des données liés à cette campagne:")),
 
                       # Versées vers autres bases?
                       radioButtons("shared", label = h5("Est-ce que les données de cette campagne ont déjà été versées vers d'autres bases de données ouvertes?"),
