@@ -10,6 +10,17 @@ shinyServer(function(input, output, session) {
 
     source("./opForm.R", local = TRUE)
 
+    ######### Instructions #########
+    showModal(modalDialog(
+            title = "Instructions",
+            p("1. Pour commencer, veuillez ajouter la localisation pour une campagne d'échantillonnage seulement à l'aide de la carte interactive."),
+            p("2. Puis, veuillez remplir le questionnaire à l'étape 2 pour cette même campagne."),
+            p("3. Si vous souhaitez remplir un questionnaire pour une autre campagne, veuillez cliquer sur « Nouvelle campagne » et refaire les étapes 1 et 2."),
+            p("4. Lorsque vous avez complété les étapes 1 et 2 pour votre dernière campagne, veuillez vous rendre à l'étape 4 sans cliquer sur « Nouvelle campagne »."),
+            p("5. Cliquez sur « Soumettre » pour soumettre votre formulaire."),
+            footer = modalButton("Commencer")
+    ))
+
 
     ######### GEO DATA #########
 
@@ -206,6 +217,10 @@ shinyServer(function(input, output, session) {
             length(responses$res), "</b> </p>"))
     })
 
+    output$nPage <- renderUI({
+      HTML(paste("<p style = 'font-size:13px;margin-top10px'> Vous êtes à la page <b>", rv$page, "de ", (length(responses$res)+1), "</b> </p>"))
+      })
+
     # ########### SUBMIT FORM submit form
     observeEvent(input$submit, {
 
@@ -217,12 +232,13 @@ shinyServer(function(input, output, session) {
         if (input$share == 1) {
         showModal(modalDialog(
           title ="Coordonnées de la personne en charge des données",
-          p("Veuillez remplir les coordonnées de la personne responsable des données."),
+          p("Veuillez indiquer les coordonnées de la personne responsable des données."),
           textInput("name", label = h5("Nom, Prénom")),
           textInput("adress", label = h5("Adresse")),
           textInput("telNo", label = h5("Numéro de téléphone")),
           textInput("email", label = h5("Adresse courriel")),
           p("Pour quitter, cliquer à l'extérieur de la fenêtre ou appuyer sur Esc."),
+          p("Cliquez sur « Enregistrer » pour confirmer l'envoi du formulaire."),
           footer = actionButton("save", class = "btn-success", label = h5("Enregistrer")),
           easyClose = TRUE
           ))
