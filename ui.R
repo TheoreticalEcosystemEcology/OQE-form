@@ -2,7 +2,6 @@ library("shiny")
 library("leaflet")
 library("shinyjs")
 library("shinythemes")
-library("RLumShiny")
 
 
 shinyUI(fluidPage

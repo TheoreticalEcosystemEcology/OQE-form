@@ -250,7 +250,9 @@ shinyServer(function(input, output, session) {
           showModal(modalDialog(
             title = "Confirmation",
             p("Les informations ont bien été enregistrés"),
-            h5("Merci!")
+            h5("Merci!"),
+            footer = tags$button(id = "close", type = "button", class = "btn action-button", onclick = "setTimeout(function(){ window.close();},500)",
+            "Fermer")
           ))
           responses$res <- list()
         }
@@ -266,8 +268,15 @@ shinyServer(function(input, output, session) {
       showModal(modalDialog(
         title = "Confirmation",
         p("Les informations ont bien été enregistrés"),
-        h5("Merci!")
+        h5("Merci!"),
+        footer = tags$button(id = "close", type = "button", class = "btn action-button", onclick = "setTimeout(function(){ window.close();},500)",
+        "Fermer")
       ))
       responses$res <- list()
     })
 })
+
+    # Close window and app
+    observeEvent(input$close, {
+      stopApp()
+      })
