@@ -3,7 +3,7 @@ Sondage sur les données scientifiques disponibles - Projet OQE
 
 # Deploy app on shiny server
 
-## 1. Install packages ad globals
+## 1. Install packages as globals
 
 ```
 installPckgsAsGlobals.bash ui.R
