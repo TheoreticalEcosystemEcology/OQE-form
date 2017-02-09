@@ -26,7 +26,6 @@ shinyServer(function(input, output, session) {
 
     observeEvent(input$map_draw_new_feature, {
         rec$map[[length(rec$map) + 1]] <- input$map_draw_new_feature
-        print(rec$map)
     })
 
     observeEvent(input$map_draw_edited_features, {
@@ -42,7 +41,6 @@ shinyServer(function(input, output, session) {
             }
           }
         }
-        print(rec$map)
 
     })
 
@@ -177,6 +175,7 @@ shinyServer(function(input, output, session) {
 
     # ########### ERASE FORM
     observeEvent(input$erase, {
+
         if (rv$page > 1) {
             responses$res[[rv$page]] <<- NULL
             rv$page <- rv$page - 1
@@ -187,9 +186,16 @@ shinyServer(function(input, output, session) {
 
             # On update le form
             updateForm(rec$form)
+
+            leafletProxy("map") %>% addGeoJSON(rec$map) %>% addDrawToolbar(polygonOptions = FALSE,
+              markerOptions = FALSE, editOptions = FALSE, polylineOptions = FALSE,
+              circleOptions = FALSE, rectangleOptions = FALSE)
+
         } else {
             if (length(responses$res) > 1) {
                 responses$res[[rv$page]] <<- NULL
+                rv$page <- rv$page + 1
+                rv$page <- rv$page - 1
                 reinit(rec)
                 rec$map <- responses$res[[rv$page]]$map
                 rec$form <- responses$res[[rv$page]]$form
@@ -200,16 +206,11 @@ shinyServer(function(input, output, session) {
             } else {
                 responses$res[[rv$page]] <<- NULL
                 reinit(rec)
+                rv$page <- rv$page + 1
+                rv$page <- rv$page - 1
             }
         }
 
-        # On reinit la map comme rv$page change pas
-        output$map <- renderLeaflet({
-            leaflet() %>% addProviderTiles("Esri.WorldTopoMap") %>% setView(1010,
-                54, 5) %>% addDrawToolbar(targetGroup = rv$page, polygonOptions = drawPolygonOptions(),
-                markerOptions = drawMarkerOptions(), editOptions = editToolbarOptions(),
-                polylineOptions = FALSE, circleOptions = FALSE, rectangleOptions = FALSE)
-        })
     })
 
     output$nCamp <- renderUI({
