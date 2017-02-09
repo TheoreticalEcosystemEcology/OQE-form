@@ -6,6 +6,6 @@ Sondage sur les données scientifiques disponibles - Projet OQE
 ## 1. Install packages as globals
 
 ```
-installPckgsAsGlobals.bash ui.R
-installPckgsAsGlobals.bash server.R
+sudo su - shiny
+Rscript install_pckgs.R
 ```
