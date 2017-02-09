@@ -234,7 +234,7 @@ shinyServer(function(input, output, session) {
           title ="Coordonnées de la personne en charge des données",
           p("Veuillez indiquer les coordonnées de la personne responsable des données."),
           textInput("name", label = h5("Nom, Prénom")),
-          textInput("adress", label = h5("Adresse")),
+          textInput("adress", label = h5("Organisme")),
           textInput("telNo", label = h5("Numéro de téléphone")),
           textInput("email", label = h5("Adresse courriel")),
           p("Pour quitter, cliquez à l'extérieur de la fenêtre ou appuyez sur Esc."),
