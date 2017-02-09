@@ -3,7 +3,7 @@ Sondage sur les données scientifiques disponibles - Projet OQE
 
 ## Getting started
 
-```
+```bash
 Rscript install_pckgs.R
 ```
 
