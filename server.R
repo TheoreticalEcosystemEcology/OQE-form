@@ -55,12 +55,12 @@ shinyServer(function(input, output, session) {
         for (j in 1:length(rec$map)) {
           for (k in 1:length(ids_delete))  {
             if (rec$map[[j]]$properties$`_leaflet_id` == ids_delete[k]) {
-                rec$map[[j]] <- NA
+                rec$map[j] <- list(NULL)
                 break
             }
           }
         }
-        print(rec$map)
+        rec$map <- rec$map[!sapply(rec$map, is.null)]
     })
 
 
@@ -237,7 +237,7 @@ shinyServer(function(input, output, session) {
           textInput("adress", label = h5("Adresse")),
           textInput("telNo", label = h5("Numéro de téléphone")),
           textInput("email", label = h5("Adresse courriel")),
-          p("Pour quitter, cliquer à l'extérieur de la fenêtre ou appuyer sur Esc."),
+          p("Pour quitter, cliquez à l'extérieur de la fenêtre ou appuyez sur Esc."),
           p("Cliquez sur « Enregistrer » pour confirmer l'envoi du formulaire."),
           footer = actionButton("save", class = "btn-success", label = h5("Enregistrer")),
           easyClose = TRUE

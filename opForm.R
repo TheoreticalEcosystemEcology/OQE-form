@@ -80,8 +80,8 @@ updateForm <- function(data) {
     updateTextInput(session, "autres_spec_status", value = paste(data[1, 26]))
 
     # update data type
-    updateCheckboxGroupInput(session, "type", choices = list(Occurence = "occur",
-        `Abondance/Frequence` = "abond", `Données individuelles (Traits, Génétiques)` = "individu",
+    updateCheckboxGroupInput(session, "type", choices = list(Occurences = "occur",
+        `Abondances/Frequences` = "abond", `Données individuelles (Traits, Génétiques)` = "individu",
         Autres = "autres_type"), selected = type_possib[which(data[1,type_possib] == TRUE)], inline = TRUE)
 
     # update text input for 'other' option in data type

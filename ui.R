@@ -14,14 +14,14 @@ shinyUI(fluidPage
                       HTML("<hr width='75%'>"),
 
                       # NEXT, PREVIOUS and ERASE BUTTON
-                      tags$div(title = "Vous pouvez visualiser les différentes campagnes que vous avez remplies.  Pour corriger l'une d'entre elles, veuillez cliquer sur « Effacer cette campagne » et compléter un nouveau questionnaire pour cette campagne.", align="center",
+                      tags$div(title = "Vous pouvez visualiser les différentes pages du formulaire que vous avez remplies.  Pour corriger l'une d'entre elles, veuillez cliquer sur « Effacer cette campagne » et compléter à nouveau les étapes 1 et 2 pour la même campagne.", align="center",
                       uiOutput("nPage"),
                       actionButton("prev", label = "Précédente"),
                       actionButton("nxt", label = "Suivante"),
                       actionButton("erase", class = "btn-danger", label = "Effacer cette campagne")),
 
                       # STEP 1 : Coordinates
-                      tags$div(title = "IMPORTANT: Vous devez ajouter la localisation d'une seule campagne à la fois.                                                                                Vous pouvez également modifier les polygones ou points que vous avez faits à l'aide du menu.",
+                      tags$div(title = "IMPORTANT: Vous devez ajouter la localisation d'une seule campagne à la fois.                                                                                Vous pouvez également modifier les polygones ou points que vous avez dessinés à l'aide du bouton « Edit layers » du menu de la carte.",
                       HTML("<hr width='75%'>"),
                       h4("Étape 1: Localisation de la campagne d'échantillonage"),
                       p("Veuillez ajouter la localisation géographique de votre campagne en utilisant la carte à gauche (le menu permet de dessiner des polygones et des points).",style="font-style:italic;font-size:13px;"),
@@ -29,7 +29,7 @@ shinyUI(fluidPage
                       ),
 
                       # STEP 2 : Form
-                      tags$div(title = "Vous devez remplir une page (Étapes 1 et 2) par campagne. Le formulaire contiendra donc autant de pages que vous avez de campagnes d'échantillonnage.",
+                      tags$div(title = "Vous devez remplir une page du formulaire (étapes 1 et 2) par campagne. Le formulaire contiendra donc autant de pages que vous avez de campagnes d'échantillonnage.",
 
                       h4("Étape 2: Formulaire"),
                       p("Veuillez compléter les informations relatives à la campagne d'échantillonage que vous venez de localiser sur la carte.",style="font-style:italic;font-size:13px;"),
@@ -44,16 +44,14 @@ shinyUI(fluidPage
                       ## Année d'échantillonnage (dateRange or date)
                       conditionalPanel(
                         condition = "input.sample == 2",
-                        tags$div(title = "Première et dernière année de la campagne d'échantillonnage récurrente.",
-                        dateRangeInput("yearRange",label = h5("Première et dernière année:")))
-                        ),
+                        dateRangeInput("yearRange",label = h5("Date de début et de fin de la campagne d'échantillonnage:"))),
                       conditionalPanel(
                         condition = "input.sample == 2",
-                        numericInput("sampleNo",label = h5("Nombre d'échantillons durant cette période"), value = 1)
+                        numericInput("sampleNo",label = h5("Nombre d'échantillons durant cette période:"), value = 1)
                         ),
                       conditionalPanel(
                         condition = "input.sample == 1",
-                        dateInput("year", label = h5("Année:"))
+                        dateInput("year", label = h5("Date de la campagne d'échantillonnage:"))
                         ),
 
                       ## Type d'échantillonnage
@@ -61,7 +59,7 @@ shinyUI(fluidPage
                                    choices = list("Observations" = 1, "Données expérimentales" = 2)),
 
                       ## Groupes taxonomiques étudiés
-                      checkboxGroupInput("taxa", label = h5("Groupe taxonomique:"),
+                      checkboxGroupInput("taxa", label = h5("Groupe(s) taxonomique(s):"),
                                          choices = list("Mammifères" = "mamm", "Mammifères marins" ="mamm_marins", "Oiseaux" = "oiseaux",
                                                         "Amphibiens" = "amph", "Reptiles" = "rept", "Poissons" = "poiss", "Arthropodes" = "arthr",
                                                         "Invertébrés autre qu'arthropodes" = "autre_arthr", "Plantes vasculaires" = "plantes_vasc",
@@ -74,44 +72,44 @@ shinyUI(fluidPage
 
                       conditionalPanel(
                         condition = "input.status == 1",
-                        checkboxGroupInput("sp_status", label = h5("Quel est ce statut?"),
+                        checkboxGroupInput("sp_status", label = h5("Quel(s) est ce statut(s)?"),
                                            choices = list("Préoccupante" = "preoccupante", "Menacée" = "menacee", "En voie de disparition" = "voie_disp", "Espèces d'importance commerciale" = "commerciale", "Autres" = "autres_status"), inline = TRUE)
                         ),
                       conditionalPanel(
                         condition = "$.inArray('autres_status', input.sp_status) > -1",
-                        textInput("autres_spec_status", label = h5("Vous avez sélectionné 'Autres', veuillez préciser"))
+                        textInput("autres_spec_status", label = h5("Vous avez sélectionné 'Autres', veuillez préciser:"))
                         ),
 
                       ## Type de données
                       checkboxGroupInput("type", label = h5("Type de données:"),
-                                         choices = list("Occurence" = "occur", "Abondance/Frequence" = "abond",
+                                         choices = list("Occurences" = "occur", "Abondances/Frequences" = "abond",
                                                         "Données individuelles (Traits, Génétiques)" = "individu",
                                                         "Autres" = "autres_type"),inline=TRUE),
                       conditionalPanel(
                         condition = "$.inArray('autres_type', input.type) > -1",
-                        textInput("autres_spec_type", label = h5("Vous avez séléctionné 'Autres', veuillez préciser?"))
+                        textInput("autres_spec_type", label = h5("Vous avez séléctionné 'Autres', veuillez préciser:"))
                         ),
 
                       ## Environnement du/des site(s)
-                      checkboxGroupInput("enviro", label = h5("Type d'écosystème:"),
+                      checkboxGroupInput("enviro", label = h5("Type(s) d'écosystème:"),
                                          choices = list("Aquatique" = "aqua", "Marin" = "marin", "Terrestre" = "terre"),
                                          inline=TRUE),
 
                       ## Financement reçu pour la campagne d'échantillonnage
-                      checkboxGroupInput("finance", label = h5("Financement reçu pour la campagne d'échantillonnage:"),
+                      checkboxGroupInput("finance", label = h5("Financement reçu pour cette campagne d'échantillonnage:"),
                                          choices = list("CRSNG" = "crsng", "FQRNT" = "fqrnt", "Autres" = "autres_finance"), inline = TRUE),
 
                       conditionalPanel(
                          condition = "$.inArray('autres_finance', input.finance) > -1",
-                         textInput("autres_spec_finance", label = h5("Vous avez séléctionné 'Autres', veuillez préciser?"))
+                         textInput("autres_spec_finance", label = h5("Vous avez séléctionné 'Autres', veuillez préciser:"))
                          ),
 
                       ## DOI
-                      tags$div(title = "Si vous avez plus d'un DOI, veuillez les séparés avec des point-virgules.", textInput("doi", label = h5("DOI de l'article ou des données liés à cette campagne:"))
+                      tags$div(title = "Si vous avez plus d'un DOI, veuillez les séparer avec des point-virgules.", textInput("doi", label = h5("DOI de l'article ou des données liés à cette campagne:"))
                       ),
 
                       ## Versées vers autres bases?
-                      radioButtons("shared", label = h5("Est-ce que les données de cette campagne ont déjà été versées vers d'autres bases de données ouvertes?"),
+                      radioButtons("shared", label = h5("Est-ce que les données de cette campagne ont déjà été versées vers une ou plusieurs autres bases de données ouvertes?"),
                                    choices = list("Oui" = 1, "Non" = 0), selected = 0,inline=TRUE),
                       conditionalPanel(
                         condition = "input.shared == 1",
@@ -121,14 +119,14 @@ shinyUI(fluidPage
                                                           "Nordicana D" = "nordi", "Quebio" = "quebio", "Autres" = "autres_db"),inline=TRUE)),
                       conditionalPanel(
                         condition = "$.inArray('autres_db', input.db) > -1",
-                        textInput("autres_spec_db", label = h5("Vous avez séléctionné 'Autres', pourriez-vous préciser?"))
+                        textInput("autres_spec_db", label = h5("Vous avez séléctionné 'Autres', veuillez préciser:"))
                         ),
 
                       textAreaInput("comments",label= h5("Des commentaires/informations supplémentaires sur cette campagne?"),rows = 3))
                       ),
 
                       # Step 3 : Add a campaign
-                      tags$div(title = "Lorsque vous avez compléter le questionnaire de votre dernière campagne, ne cliquez pas sur « Nouvelle campagne ». Passer directement à l'étape 4. En cliquant sur « Soumettre », votre dernière campagne sera enregistrée avec les autres.",
+                      tags$div(title = "Lorsque vous avez complété le questionnaire (étape 1 et 2) de votre dernière campagne, ne cliquez pas sur « Nouvelle campagne ». Passez directement à l'étape 4. En cliquant sur « Soumettre », votre dernière campagne sera enregistrée avec les autres.",
                       HTML("<hr width='75%'>"),
                       h4("Étape 3: Ajouter une nouvelle campagne"),
                       p("Si vous avez une nouvelle campagne d'échantillonnage à ajouter, cliquez sur le bouton « Nouvelle campagne ».",style="font-style:italic;font-size:13px;"),
