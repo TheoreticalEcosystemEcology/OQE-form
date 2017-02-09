@@ -10,18 +10,6 @@ shinyServer(function(input, output, session) {
 
     source("./opForm.R", local = TRUE)
 
-    ######### Instructions #########
-    showModal(modalDialog(
-            title = "Instructions",
-            p("1. Pour commencer, veuillez ajouter la localisation pour une campagne d'échantillonnage seulement à l'aide de la carte interactive."),
-            p("2. Puis, veuillez remplir le questionnaire à l'étape 2 pour cette même campagne."),
-            p("3. Si vous souhaitez remplir un questionnaire pour une autre campagne, veuillez cliquer sur « Nouvelle campagne » et refaire les étapes 1 et 2."),
-            p("4. Lorsque vous avez complété les étapes 1 et 2 pour votre dernière campagne, veuillez vous rendre à l'étape 4 sans cliquer sur « Nouvelle campagne »."),
-            p("5. Cliquez sur « Soumettre » pour soumettre votre formulaire."),
-            footer = modalButton("Commencer")
-    ))
-
-
     ######### GEO DATA #########
 
     # Créé responses$res s'il n'existe pas
@@ -38,29 +26,41 @@ shinyServer(function(input, output, session) {
 
     observeEvent(input$map_draw_new_feature, {
         rec$map[[length(rec$map) + 1]] <- input$map_draw_new_feature
+        print(rec$map)
     })
 
     observeEvent(input$map_draw_edited_features, {
 
-        id_edit <- input$map_draw_edited_features$features[[1]]$properties$`_leaflet_id`
-
-        for (i in 1:length(rec$map)) {
-            if (rec$map[[i]]$properties$`_leaflet_id` == id_edit) {
-                rec$map[[i]] <- input$map_draw_edited_features
+        for(i in 1:length(input$map_draw_edited_features$features)) {
+          ids_edit[i] <- input$map_draw_edited_features$features[[i]]$properties$`_leaflet_id`
             }
+
+        for (j in 1:length(rec$map)) {
+          for (k in 1:length(ids_edit)){
+            if (rec$map[[j]]$properties$`_leaflet_id` == ids_edit[k]) {
+                rec$map[[j]] <- input$map_draw_edited_features$features[[k]]
+            }
+          }
         }
+        print(rec$map)
 
     })
 
     observeEvent(input$map_draw_deleted_features, {
 
-        id_edit <- input$map_draw_edited_features$features[[1]]$properties$`_leaflet_id`
-
-        for (i in 1:length(rep$map)) {
-            if (rec$map[[i]]$properties$`_leaflet_id` == id_edit)
-                rec$map[[i]] <- input$map_draw_edited_features
+        for(i in 1:length(input$map_draw_deleted_features$features)) {
+          ids_delete[i] <<- input$map_draw_deleted_features$features[[i]]$properties$`_leaflet_id`
         }
 
+        for (j in 1:length(rec$map)) {
+          for (k in 1:length(ids_delete))  {
+            if (rec$map[[j]]$properties$`_leaflet_id` == ids_delete[k]) {
+                rec$map[[j]] <- NA
+                break
+            }
+          }
+        }
+        print(rec$map)
     })
 
 
@@ -269,14 +269,7 @@ shinyServer(function(input, output, session) {
         title = "Confirmation",
         p("Les informations ont bien été enregistrés"),
         h5("Merci!"),
-        footer = tags$button(id = "close", type = "button", class = "btn action-button", onclick = "setTimeout(function(){ window.close();},500)",
-        "Fermer")
       ))
       responses$res <- list()
     })
 })
-
-    # Close window and app
-    observeEvent(input$close, {
-      stopApp()
-      })

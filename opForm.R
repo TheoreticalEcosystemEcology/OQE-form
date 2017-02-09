@@ -29,6 +29,11 @@ enviro_possib <- c("aqua", "marin", "terre")
 finance_possib <- c("crsng", "fqrnt", "autres_finance")
 db_possib <- c("gbif", "dataone", "dryad", "eol", "esa", "fig", "mangal", "naturaliste", "nordi", "quebio", "autres_db")
 
+# References Edited and Deleted
+ids_edit <- c()
+ids_delete <- c()
+pos_delete <- c()
+
 
 
 # Reinit form and current rec
