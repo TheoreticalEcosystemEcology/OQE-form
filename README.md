@@ -1,11 +1,14 @@
 # OQE-form
 Sondage sur les données scientifiques disponibles - Projet OQE
 
-# Deploy app on shiny server
-
-## 1. Install packages as globals
+## Getting started
 
 ```
-sudo su - shiny
 Rscript install_pckgs.R
+```
+
+## Deploy app in local 
+
+```r
+shiny::runApp()
 ```
