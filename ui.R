@@ -42,7 +42,7 @@ shinyUI(fluidPage
                       conditionalPanel(
                         condition = "input.shared == 1",
                         checkboxGroupInput("db", label = h5("Si oui, le(s)quel(s)?"),
-                                           choices = list("Canadensis/GBIF" = "gbif", "DataONE" = "dataone", "Dryad" = "dryad", "Encyclopedia of Life (EOL)" = "eol",
+                                           choices = list("Canadensys/GBIF" = "gbif", "DataONE" = "dataone", "Dryad" = "dryad", "Encyclopedia of Life (EOL)" = "eol",
                                                           "(ESA) data.esa.org" = "esa", "Fig Share" = "fig", "Mangal" = "mangal", "Le Naturaliste" = "naturaliste",
                                                           "Nordicana D" = "nordi", "Quebio" = "quebio", "Autres" = "autres_db"),inline=TRUE)),
                       conditionalPanel(
@@ -60,22 +60,18 @@ shinyUI(fluidPage
                         selectInput("sample", label =  h5("Campagne d'échantillonnage:"), choices = list("Ponctuelle" = 1, "Récurrente" = 2))
                         ),
 
-                        ## Année d'échantillonnage (dateRange or date)
-                        conditionalPanel(
-                          condition = "input.sample == 2",
-                          dateRangeInput("yearRange",label = h5("Date de début et de fin de la campagne d'échantillonnage:"))),
+                        ## Année d'échantillonnage
+                        dateRangeInput("yearRange",label = h5("Date de début et de fin de la campagne d'échantillonnage:")),
+
+                        ## Nombre d'échantillons
                         conditionalPanel(
                           condition = "input.sample == 2",
                           numericInput("sampleNo",label = h5("Nombre d'échantillons durant cette période:"), value = 1)
                           ),
-                        conditionalPanel(
-                          condition = "input.sample == 1",
-                          dateInput("year", label = h5("Date de la campagne d'échantillonnage:"))
-                          ),
 
                         ## Type d'échantillonnage
-                        radioButtons("context", label = h5("Type d'échantillonnage:"),
-                                     choices = list("Observations" = 1, "Données expérimentales" = 2)),
+                        radioButtons("context", label = h5("Type d'observations:"),
+                                     choices = list("Données empiriques" = 1, "Données expérimentales" = 2)),
 
                         ## Groupes taxonomiques étudiés
                         checkboxGroupInput("taxa", label = h5("Groupe(s) taxonomique(s):"),
@@ -118,13 +114,13 @@ shinyUI(fluidPage
 
                         ## Financement reçu pour la campagne d'échantillonnage
                         checkboxGroupInput("finance", label = h5("Financement reçu pour cette campagne d'échantillonnage:"),
-                                           choices = list("CRSNG" = "crsng", "FQRNT" = "fqrnt", "Autres" = "autres_finance"), inline = TRUE),
+                                           choices = list("CRSNG" = "crsng", "FRQNT" = "frqnt", "Autres" = "autres_finance"), inline = TRUE),
 
                         conditionalPanel(
                            condition = "$.inArray('autres_finance', input.finance) > -1",
                            textInput("autres_spec_finance", label = h5("Vous avez séléctionné 'Autres', veuillez préciser:"))
                            )
-                        ),
+                      ),
 
                       ## DOI
                       tags$div(title = "Si vous avez plus d'un DOI, veuillez les séparer avec des point-virgules.", textInput("doi", label = h5("DOI de l'article ou des données liés à cette campagne:"))
@@ -155,6 +151,7 @@ shinyUI(fluidPage
                       p("Lorsque vous avez ajouté toutes vos campagnes, veuillez soumettre votre formulaire à l'aide du bouton « Soumettre »",style="font-style:italic;font-size:13px;"),
                       actionButton("submit", class = "btn-success", label = "Soumettre")),
 
+                      # MAP
                   mainPanel(
                         leafletOutput("map")
                         )

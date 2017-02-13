@@ -73,22 +73,21 @@ shinyServer(function(input, output, session) {
         rec$form[1, 2] <- as.character(input$yearRange)[1]
         rec$form[1, 3] <- as.character(input$yearRange)[2]
         rec$form[1, 4] <- input$sampleNo
-        rec$form[1, 5] <- as.character(input$year)
-        rec$form[1, 6] <- input$context
-        rec$form[1, 7:19] <- taxa_ref %in% input$taxa
-        rec$form[1, 20] <- input$status
-        rec$form[1, 21:25] <- status_ref %in% input$sp_status
-        rec$form[1, 26] <- as.character(input$autres_spec_status)
-        rec$form[1, 27:30] <- type_ref %in% input$type
-        rec$form[1, 31] <- as.character(input$autres_spec_type)
-        rec$form[1, 32:34] <- enviro_ref %in% input$enviro
-        rec$form[1, 35:37] <- finance_ref %in% input$finance
-        rec$form[1, 38] <- as.character(input$autres_spec_finance)
-        rec$form[1, 39] <- as.character(input$doi)
-        rec$form[1, 40] <- input$shared
-        rec$form[1, 41:51] <- db_ref %in% input$db
-        rec$form[1, 52] <- as.character(input$autres_spec_db)
-        rec$form[1, 53] <- as.character(input$comments)
+        rec$form[1, 5] <- input$context
+        rec$form[1, 6:18] <- taxa_ref %in% input$taxa
+        rec$form[1, 19] <- input$status
+        rec$form[1, 20:24] <- status_ref %in% input$sp_status
+        rec$form[1, 25] <- as.character(input$autres_spec_status)
+        rec$form[1, 26:29] <- type_ref %in% input$type
+        rec$form[1, 30] <- as.character(input$autres_spec_type)
+        rec$form[1, 31:33] <- enviro_ref %in% input$enviro
+        rec$form[1, 34:36] <- finance_ref %in% input$finance
+        rec$form[1, 37] <- as.character(input$autres_spec_finance)
+        rec$form[1, 38] <- as.character(input$doi)
+        rec$form[1, 39] <- input$shared
+        rec$form[1, 40:50] <- db_ref %in% input$db
+        rec$form[1, 51] <- as.character(input$autres_spec_db)
+        rec$form[1, 52] <- as.character(input$comments)
 
         # Liste des réponses
         response <- list(form = rec$form, map = rec$map)
@@ -238,8 +237,8 @@ shinyServer(function(input, output, session) {
           p("Le partage des coordonnées est facultatif.", style = "font-style:italic;font-weight:bold"),
           textInput("name", label = h5("Nom, Prénom")),
           textInput("email", label = h5("Adresse courriel")),
+          p("Cliquez sur « Enregistrer » pour confirmer l'envoi du formulaire.")
           p("Pour quitter, cliquez à l'extérieur de la fenêtre ou appuyez sur Esc."),
-          p("Cliquez sur « Enregistrer » pour confirmer l'envoi du formulaire."),
           footer = actionButton("save", class = "btn-success", label = h5("Enregistrer")),
           easyClose = TRUE
           ))
