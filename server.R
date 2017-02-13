@@ -237,7 +237,7 @@ shinyServer(function(input, output, session) {
           p("Le partage des coordonnées est facultatif.", style = "font-style:italic;font-weight:bold"),
           textInput("name", label = h5("Nom, Prénom")),
           textInput("email", label = h5("Adresse courriel")),
-          p("Cliquez sur « Enregistrer » pour confirmer l'envoi du formulaire.")
+          p("Cliquez sur « Enregistrer » pour confirmer l'envoi du formulaire."),
           p("Pour quitter, cliquez à l'extérieur de la fenêtre ou appuyez sur Esc."),
           footer = actionButton("save", class = "btn-success", label = h5("Enregistrer")),
           easyClose = TRUE

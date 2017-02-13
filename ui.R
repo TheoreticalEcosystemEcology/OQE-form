@@ -70,7 +70,7 @@ shinyUI(fluidPage
                           ),
 
                         ## Type d'échantillonnage
-                        radioButtons("context", label = h5("Type d'observations:"),
+                        radioButtons("context", label = h5("Type de données:"),
                                      choices = list("Données empiriques" = 1, "Données expérimentales" = 2)),
 
                         ## Groupes taxonomiques étudiés
@@ -96,7 +96,7 @@ shinyUI(fluidPage
                           ),
 
                         ## Types de données
-                        checkboxGroupInput("type", label = h5("Type(s) de données:"),
+                        checkboxGroupInput("type", label = h5("Type(s) d'observations:"),
                                            choices = list("Occurences" = "occur", "Abondances/Frequences" = "abond",
                                                           "Données individuelles (Traits, Génétiques)" = "individu",
                                                           "Autres" = "autres_type"),inline=TRUE),
