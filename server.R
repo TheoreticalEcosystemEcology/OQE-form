@@ -3,6 +3,7 @@ library("leaflet")
 library("leaflet.extras")
 library("shinyjs")
 
+# milliseconds in the .RDS file
 op <- options(digits.secs=3)
 
 # add data in the list
@@ -234,9 +235,8 @@ shinyServer(function(input, output, session) {
         showModal(modalDialog(
           title ="Coordonnées de la personne en charge des données",
           p("Veuillez indiquer les coordonnées de la personne responsable des données."),
+          p("Le partage des coordonnées est facultatif.", style = "font-style:italic;font-weight:bold"),
           textInput("name", label = h5("Nom, Prénom")),
-          textInput("adress", label = h5("Organisme")),
-          textInput("telNo", label = h5("Numéro de téléphone")),
           textInput("email", label = h5("Adresse courriel")),
           p("Pour quitter, cliquez à l'extérieur de la fenêtre ou appuyez sur Esc."),
           p("Cliquez sur « Enregistrer » pour confirmer l'envoi du formulaire."),
@@ -270,6 +270,8 @@ shinyServer(function(input, output, session) {
         title = "Confirmation",
         p("Les informations ont bien été enregistrés"),
         h5("Merci!"),
+        footer = tags$button(id = "close", type = "button", class = "btn action-button", onclick = "setTimeout(function(){ window.close();},500)",
+        "Fermer")
       ))
       responses$res <- list()
     })

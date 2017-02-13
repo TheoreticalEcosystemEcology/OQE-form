@@ -35,82 +35,10 @@ shinyUI(fluidPage
                       p("Veuillez compléter les informations relatives à la campagne d'échantillonage que vous venez de localiser sur la carte.",style="font-style:italic;font-size:13px;"),
 
                       div(id = "formulaire",
-                      ## Campagne d'échantillonnage
-                      tags$div(title = "Ponctuelle:   Campagne d'échantillonnage effectuée une seule fois.
-                                                                                                                               Récurrente:    Campagne d'échantillonnage effectuée à plusieurs reprises , sur une base régulière ou non.",
-                      selectInput("sample", label =  h5("Campagne d'échantillonnage:"), choices = list("Ponctuelle" = 1, "Récurrente" = 2))
-                      ),
-
-                      ## Année d'échantillonnage (dateRange or date)
-                      conditionalPanel(
-                        condition = "input.sample == 2",
-                        dateRangeInput("yearRange",label = h5("Date de début et de fin de la campagne d'échantillonnage:"))),
-                      conditionalPanel(
-                        condition = "input.sample == 2",
-                        numericInput("sampleNo",label = h5("Nombre d'échantillons durant cette période:"), value = 1)
-                        ),
-                      conditionalPanel(
-                        condition = "input.sample == 1",
-                        dateInput("year", label = h5("Date de la campagne d'échantillonnage:"))
-                        ),
-
-                      ## Type d'échantillonnage
-                      radioButtons("context", label = h5("Type d'échantillonnage:"),
-                                   choices = list("Observations" = 1, "Données expérimentales" = 2)),
-
-                      ## Groupes taxonomiques étudiés
-                      checkboxGroupInput("taxa", label = h5("Groupe(s) taxonomique(s):"),
-                                         choices = list("Mammifères" = "mamm", "Mammifères marins" ="mamm_marins", "Oiseaux" = "oiseaux",
-                                                        "Amphibiens" = "amph", "Reptiles" = "rept", "Poissons" = "poiss", "Arthropodes" = "arthr",
-                                                        "Invertébrés autre qu'arthropodes" = "autre_arthr", "Plantes vasculaires" = "plantes_vasc",
-                                                        "Plantes non-vasculaires" = "plantes_nonvasc", "Champignons, moisissures, levures" = "champ",
-                                                        "Organismes unicellulaires" = "unicell", "Bactéries" = "bact"), inline=TRUE),
-
-                      ## Espèces à statut
-                      radioButtons("status", label = h5("Avez-vous échantillonné une ou plusieurs espèces ayant un statut particulier?"),
-                                   choices = list("Oui" = 1, "Non" = 0), selected = 0, inline=TRUE),
-
-                      conditionalPanel(
-                        condition = "input.status == 1",
-                        checkboxGroupInput("sp_status", label = h5("Quel(s) est ce statut(s)?"),
-                                           choices = list("Préoccupante" = "preoccupante", "Menacée" = "menacee", "En voie de disparition" = "voie_disp", "Espèces d'importance commerciale" = "commerciale", "Autres" = "autres_status"), inline = TRUE)
-                        ),
-                      conditionalPanel(
-                        condition = "$.inArray('autres_status', input.sp_status) > -1",
-                        textInput("autres_spec_status", label = h5("Vous avez sélectionné 'Autres', veuillez préciser:"))
-                        ),
-
-                      ## Type de données
-                      checkboxGroupInput("type", label = h5("Type de données:"),
-                                         choices = list("Occurences" = "occur", "Abondances/Frequences" = "abond",
-                                                        "Données individuelles (Traits, Génétiques)" = "individu",
-                                                        "Autres" = "autres_type"),inline=TRUE),
-                      conditionalPanel(
-                        condition = "$.inArray('autres_type', input.type) > -1",
-                        textInput("autres_spec_type", label = h5("Vous avez séléctionné 'Autres', veuillez préciser:"))
-                        ),
-
-                      ## Environnement du/des site(s)
-                      checkboxGroupInput("enviro", label = h5("Type(s) d'écosystème:"),
-                                         choices = list("Aquatique" = "aqua", "Marin" = "marin", "Terrestre" = "terre"),
-                                         inline=TRUE),
-
-                      ## Financement reçu pour la campagne d'échantillonnage
-                      checkboxGroupInput("finance", label = h5("Financement reçu pour cette campagne d'échantillonnage:"),
-                                         choices = list("CRSNG" = "crsng", "FQRNT" = "fqrnt", "Autres" = "autres_finance"), inline = TRUE),
-
-                      conditionalPanel(
-                         condition = "$.inArray('autres_finance', input.finance) > -1",
-                         textInput("autres_spec_finance", label = h5("Vous avez séléctionné 'Autres', veuillez préciser:"))
-                         ),
-
-                      ## DOI
-                      tags$div(title = "Si vous avez plus d'un DOI, veuillez les séparer avec des point-virgules.", textInput("doi", label = h5("DOI de l'article ou des données liés à cette campagne:"))
-                      ),
 
                       ## Versées vers autres bases?
                       radioButtons("shared", label = h5("Est-ce que les données de cette campagne ont déjà été versées vers une ou plusieurs autres bases de données ouvertes?"),
-                                   choices = list("Oui" = 1, "Non" = 0), selected = 0,inline=TRUE),
+                                   choices = list("Oui" = 1, "Non" = 0), selected = 1,inline=TRUE),
                       conditionalPanel(
                         condition = "input.shared == 1",
                         checkboxGroupInput("db", label = h5("Si oui, le(s)quel(s)?"),
@@ -122,6 +50,87 @@ shinyUI(fluidPage
                         textInput("autres_spec_db", label = h5("Vous avez séléctionné 'Autres', veuillez préciser:"))
                         ),
 
+                      # Si données déjà versées vers d'autres bases, cette section n'est pas à remplir
+                      conditionalPanel(
+                        condition = "input.shared == 0",
+
+                        ## Campagne d'échantillonnage
+                        tags$div(title = "Ponctuelle:   Campagne d'échantillonnage effectuée une seule fois.
+                                                                                                                                 Récurrente:    Campagne d'échantillonnage effectuée à plusieurs reprises , sur une base régulière ou non.",
+                        selectInput("sample", label =  h5("Campagne d'échantillonnage:"), choices = list("Ponctuelle" = 1, "Récurrente" = 2))
+                        ),
+
+                        ## Année d'échantillonnage (dateRange or date)
+                        conditionalPanel(
+                          condition = "input.sample == 2",
+                          dateRangeInput("yearRange",label = h5("Date de début et de fin de la campagne d'échantillonnage:"))),
+                        conditionalPanel(
+                          condition = "input.sample == 2",
+                          numericInput("sampleNo",label = h5("Nombre d'échantillons durant cette période:"), value = 1)
+                          ),
+                        conditionalPanel(
+                          condition = "input.sample == 1",
+                          dateInput("year", label = h5("Date de la campagne d'échantillonnage:"))
+                          ),
+
+                        ## Type d'échantillonnage
+                        radioButtons("context", label = h5("Type d'échantillonnage:"),
+                                     choices = list("Observations" = 1, "Données expérimentales" = 2)),
+
+                        ## Groupes taxonomiques étudiés
+                        checkboxGroupInput("taxa", label = h5("Groupe(s) taxonomique(s):"),
+                                           choices = list("Mammifères" = "mamm", "Mammifères marins" ="mamm_marins", "Oiseaux" = "oiseaux",
+                                                          "Amphibiens" = "amph", "Reptiles" = "rept", "Poissons" = "poiss", "Arthropodes" = "arthr",
+                                                          "Invertébrés autre qu'arthropodes" = "autre_arthr", "Plantes vasculaires" = "plantes_vasc",
+                                                          "Plantes non-vasculaires" = "plantes_nonvasc", "Champignons, moisissures, levures" = "champ",
+                                                          "Organismes unicellulaires" = "unicell", "Bactéries" = "bact"), inline=TRUE),
+
+                        ## Espèces à statut
+                        radioButtons("status", label = h5("Avez-vous échantillonné une ou plusieurs espèces ayant un statut particulier?"),
+                                     choices = list("Oui" = 1, "Non" = 0), selected = 0, inline=TRUE),
+
+                        conditionalPanel(
+                          condition = "input.status == 1",
+                          checkboxGroupInput("sp_status", label = h5("Quel(s) est ce statut(s)?"),
+                                             choices = list("Préoccupante" = "preoccupante", "Menacée" = "menacee", "En voie de disparition" = "voie_disp", "Espèces d'importance commerciale" = "commerciale", "Autres" = "autres_status"), inline = TRUE)
+                          ),
+                        conditionalPanel(
+                          condition = "$.inArray('autres_status', input.sp_status) > -1",
+                          textInput("autres_spec_status", label = h5("Vous avez sélectionné 'Autres', veuillez préciser:"))
+                          ),
+
+                        ## Types de données
+                        checkboxGroupInput("type", label = h5("Type(s) de données:"),
+                                           choices = list("Occurences" = "occur", "Abondances/Frequences" = "abond",
+                                                          "Données individuelles (Traits, Génétiques)" = "individu",
+                                                          "Autres" = "autres_type"),inline=TRUE),
+
+                        ## Autres types de données
+                        conditionalPanel(
+                          condition = "$.inArray('autres_type', input.type) > -1",
+                          textInput("autres_spec_type", label = h5("Vous avez sélectionné 'Autres', veuillez préciser:"))
+                          ),
+
+                        ## Environnement du/des site(s)
+                        checkboxGroupInput("enviro", label = h5("Type(s) d'écosystème:"),
+                                           choices = list("Aquatique" = "aqua", "Marin" = "marin", "Terrestre" = "terre"),
+                                           inline=TRUE),
+
+                        ## Financement reçu pour la campagne d'échantillonnage
+                        checkboxGroupInput("finance", label = h5("Financement reçu pour cette campagne d'échantillonnage:"),
+                                           choices = list("CRSNG" = "crsng", "FQRNT" = "fqrnt", "Autres" = "autres_finance"), inline = TRUE),
+
+                        conditionalPanel(
+                           condition = "$.inArray('autres_finance', input.finance) > -1",
+                           textInput("autres_spec_finance", label = h5("Vous avez séléctionné 'Autres', veuillez préciser:"))
+                           )
+                        ),
+
+                      ## DOI
+                      tags$div(title = "Si vous avez plus d'un DOI, veuillez les séparer avec des point-virgules.", textInput("doi", label = h5("DOI de l'article ou des données liés à cette campagne:"))
+                      ),
+
+                      ## Commentaires
                       textAreaInput("comments",label= h5("Des commentaires/informations supplémentaires sur cette campagne?"),rows = 3))
                       ),
 
@@ -137,7 +146,8 @@ shinyUI(fluidPage
                       # Step 4 : Share your data?
                       HTML("<hr width='75%'>"),
                       h4("Étape 4: Intérêt à partager les données"),
-                      radioButtons("share", label = h5("Si vous disposez d'outils et d'aide appropriés, seriez-vous intéressé(e) à rendre disponible ces données?"), choices = list("Oui" = 1, "Non" = 0), selected = 0, inline = TRUE),
+                      radioButtons("share", label = h5("Si vous disposez d'outils et d'aide appropriés, seriez-vous intéressé(e) à rendre disponibles ces données?"), choices = list("Oui" = 1, "Non" = 0), selected = 0, inline = TRUE),
+                      p("Si oui, une fenêtre vous demandera les coordonnées de la personne responsable des données (facultatif).", style = "font-style:italic;font-size:13px"),
 
                       # Step 5 : Submit the form
                       HTML("<hr width='75%'>"),
