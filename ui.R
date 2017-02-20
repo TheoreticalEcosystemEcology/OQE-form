@@ -71,7 +71,7 @@ shinyUI(fluidPage
 
                         ## Type d'échantillonnage
                         radioButtons("context", label = h5("Type de données:"),
-                                     choices = list("Données empiriques" = 1, "Données expérimentales" = 2)),
+                                     choices = list("Données empiriques" = 1, "Données expérimentales" = 2), inline = TRUE),
 
                         ## Groupes taxonomiques étudiés
                         checkboxGroupInput("taxa", label = h5("Groupe(s) taxonomique(s):"),
