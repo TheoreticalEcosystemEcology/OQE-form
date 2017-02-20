@@ -13,16 +13,8 @@ shinyUI(fluidPage
                       h3("Sondage sur vos campagnes d'échantillonage",align = "center",style="font-weight:bold;margin-bottom:15px"),
                       HTML("<hr width='75%'>"),
 
-                      # NEXT, PREVIOUS and ERASE BUTTON
-                      tags$div(title = "Vous pouvez visualiser les différentes pages du formulaire que vous avez remplies.  Pour corriger l'une d'entre elles, veuillez cliquer sur « Effacer cette campagne » et compléter à nouveau les étapes 1 et 2 pour la même campagne.", align="center",
-                      uiOutput("nPage"),
-                      actionButton("prev", label = "Précédente"),
-                      actionButton("nxt", label = "Suivante"),
-                      actionButton("erase", class = "btn-danger", label = "Effacer cette campagne")),
-
                       # STEP 1 : Coordinates
                       tags$div(title = "IMPORTANT: Vous devez ajouter la localisation d'une seule campagne à la fois.                                                                                Vous pouvez également modifier les polygones ou points que vous avez dessinés à l'aide du bouton « Edit layers » du menu de la carte.",
-                      HTML("<hr width='75%'>"),
                       h4("Étape 1: Localisation de la campagne d'échantillonage"),
                       p("Veuillez ajouter la localisation géographique de votre campagne en utilisant la carte à gauche (le menu permet de dessiner des polygones et des points).",style="font-style:italic;font-size:13px;"),
                       HTML("<hr width='75%'>")
@@ -138,6 +130,17 @@ shinyUI(fluidPage
                       actionButton("add", class = "btn-primary", label = "Nouvelle campagne"),
                       uiOutput("nCamp")
                       ),
+
+                      # NEXT, PREVIOUS and ERASE BUTTON
+                      HTML("<hr width='75%'>"),
+                      h4("Navigation entre les différentes pages"),
+                      p("Vous pouvez visualiser chaque campagne en cliquant sur les boutons « Suivant » et « Précédent ».", style="font-style:italic;font-size:13px;"),
+                      p("Si vous avez fait une erreur sur l'une des campagnes, veuillez effacer la page de cette campagne en cliquant sur « Effacer cette campagne ».", style="font-style:italic;font-size:13px;"),
+                      tags$div(title = "Vous pouvez visualiser les différentes pages du formulaire que vous avez remplies.  Pour corriger l'une d'entre elles, veuillez cliquer sur « Effacer cette campagne » et compléter à nouveau les étapes 1 et 2 pour la même campagne.", align="center",
+                      uiOutput("nPage"),
+                      actionButton("prev", label = "Précédente"),
+                      actionButton("nxt", label = "Suivante"),
+                      actionButton("erase", class = "btn-danger", label = "Effacer cette campagne")),
 
                       # Step 4 : Share your data?
                       HTML("<hr width='75%'>"),
