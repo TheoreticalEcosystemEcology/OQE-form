@@ -249,11 +249,11 @@ shinyServer(function(input, output, session) {
               "data_set.rds"))
           showModal(modalDialog(
             title = "Confirmation",
-            p("Les informations ont bien été enregistrés"),
-            h5("Merci!"),
-            footer = tags$button(id = "close", type = "button", class = "btn action-button", onclick = "window.close()",
-            "Fermer")
-          ))
+            p("Les informations ont bien été enregistrées."),
+            p("Vous pouvez maintenant quitter cette fenêtre."),
+            p("Merci!"),
+            footer = NULL)
+          )
           responses$res <- list()
         }
     })
@@ -267,11 +267,11 @@ shinyServer(function(input, output, session) {
           "data_set.rds"))
       showModal(modalDialog(
         title = "Confirmation",
-        p("Les informations ont bien été enregistrés"),
-        h5("Merci!"),
-        footer = tags$button(id = "close", type = "button", class = "btn action-button", onclick = "window.close()",
-        "Fermer")
-      ))
+        p("Les informations ont bien été enregistrées."),
+        p("Vous pouvez maintenant quitter cette fenêtre."),
+        p("Merci!"),
+        footer = NULL)
+      )
       responses$res <- list()
     })
 })
