@@ -250,7 +250,7 @@ shinyServer(function(input, output, session) {
           showModal(modalDialog(
             title = "Confirmation",
             p("Les informations ont bien été enregistrées."),
-            p("Vous pouvez maintenant quitter cette fenêtre."),
+            p("Vous pouvez maintenant quitter la page."),
             p("Merci!"),
             footer = NULL)
           )
@@ -268,7 +268,7 @@ shinyServer(function(input, output, session) {
       showModal(modalDialog(
         title = "Confirmation",
         p("Les informations ont bien été enregistrées."),
-        p("Vous pouvez maintenant quitter cette fenêtre."),
+        p("Vous pouvez maintenant quitter la page."),
         p("Merci!"),
         footer = NULL)
       )
