@@ -251,7 +251,7 @@ shinyServer(function(input, output, session) {
             title = "Confirmation",
             p("Les informations ont bien été enregistrés"),
             h5("Merci!"),
-            footer = tags$button(id = "close", type = "button", class = "btn action-button", onclick = "setTimeout(function(){ window.close();},500)",
+            footer = tags$button(id = "close", type = "button", class = "btn action-button", onclick = "window.close()",
             "Fermer")
           ))
           responses$res <- list()
@@ -269,7 +269,7 @@ shinyServer(function(input, output, session) {
         title = "Confirmation",
         p("Les informations ont bien été enregistrés"),
         h5("Merci!"),
-        footer = tags$button(id = "close", type = "button", class = "btn action-button", onclick = "setTimeout(function(){ window.close();},500)",
+        footer = tags$button(id = "close", type = "button", class = "btn action-button", onclick = "window.close()",
         "Fermer")
       ))
       responses$res <- list()
