@@ -62,8 +62,8 @@ updateForm <- function(data) {
     # update taxa
     updateCheckboxGroupInput(session, "taxa", choices = list(Mammifères = "mamm",
         `Mammifères marins` = "mamm_marins", Oiseaux = "oiseaux", Amphibiens = "amph",
-        Reptiles = "rept", Poissons = "poiss", Arthropodes = "arthr", "Invertébrés autre qu'arthropodes" = "autre_arthr",
-        `Plantes vasculaires` = "plantes_vasc", `Plantes non-vasculaires` = "plantes_nonvasc",
+        Reptiles = "rept", Poissons = "poiss", Arthropodes = "arthr", "Invertébrés autres qu'arthropodes" = "autre_arthr",
+        `Plantes vasculaires` = "plantes_vasc", `Plantes non vasculaires` = "plantes_nonvasc",
         `Champignons, moisissures, levures` = "champ", `Organismes unicellulaires` = "unicell",
         Bactéries = "bact"), selected = taxa_possib[which(data[1,taxa_possib] == TRUE)], inline = TRUE)
 
@@ -78,8 +78,8 @@ updateForm <- function(data) {
     updateTextInput(session, "autres_spec_status", value = paste(data[1, 25]))
 
     # update data type
-    updateCheckboxGroupInput(session, "type", choices = list(Occurences = "occur",
-        `Abondances/Frequences` = "abond", `Données individuelles (Traits, Génétiques)` = "individu",
+    updateCheckboxGroupInput(session, "type", choices = list(Occurrences = "occur",
+        `Abondances/Frequences` = "abond", `Données individuelles (traits, génétiques)` = "individu",
         Autres = "autres_type"), selected = type_possib[which(data[1,type_possib] == TRUE)], inline = TRUE)
 
     # update text input for 'other' option in data type

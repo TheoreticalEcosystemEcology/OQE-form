@@ -10,12 +10,12 @@ shinyUI(fluidPage
                   sidebarPanel(style = "overflow-y:scroll; max-height: 100vh !important",
 
                       # TITLE
-                      h3("Sondage sur vos campagnes d'échantillonage",align = "center",style="font-weight:bold;margin-bottom:15px"),
+                      h3("Sondage sur vos campagnes d'échantillonnage",align = "center",style="font-weight:bold;margin-bottom:15px"),
                       HTML("<hr width='75%'>"),
 
                       # STEP 1 : Coordinates
                       tags$div(title = "IMPORTANT: Vous devez ajouter la localisation d'une seule campagne à la fois.                                                                                Vous pouvez également modifier les polygones ou points que vous avez dessinés à l'aide du bouton « Edit layers » du menu de la carte.",
-                      h4("Étape 1: Localisation de la campagne d'échantillonage"),
+                      h4("Étape 1: Localisation de la campagne d'échantillonnage"),
                       p("Veuillez ajouter la localisation géographique de votre campagne en utilisant la carte à gauche (le menu permet de dessiner des polygones et des points).",style="font-style:italic;font-size:13px;"),
                       HTML("<hr width='75%'>")
                       ),
@@ -24,7 +24,7 @@ shinyUI(fluidPage
                       tags$div(title = "Vous devez remplir une page du formulaire (étapes 1 et 2) par campagne. Le formulaire contiendra donc autant de pages que vous avez de campagnes d'échantillonnage.",
 
                       h4("Étape 2: Formulaire"),
-                      p("Veuillez compléter les informations relatives à la campagne d'échantillonage que vous venez de localiser sur la carte.",style="font-style:italic;font-size:13px;"),
+                      p("Veuillez compléter les informations relatives à la campagne d'échantillonnage que vous venez de localiser sur la carte.",style="font-style:italic;font-size:13px;"),
 
                       div(id = "formulaire",
 
@@ -39,7 +39,7 @@ shinyUI(fluidPage
                                                           "Nordicana D" = "nordi", "Quebio" = "quebio", "Autres" = "autres_db"),inline=TRUE)),
                       conditionalPanel(
                         condition = "$.inArray('autres_db', input.db) > -1",
-                        textInput("autres_spec_db", label = h5("Vous avez séléctionné 'Autres', veuillez préciser:"))
+                        textInput("autres_spec_db", label = h5("Vous avez sélectionné 'Autres', veuillez préciser:"))
                         ),
 
                       # Si données déjà versées vers d'autres bases, cette section n'est pas à remplir
@@ -69,8 +69,8 @@ shinyUI(fluidPage
                         checkboxGroupInput("taxa", label = h5("Groupe(s) taxonomique(s):"),
                                            choices = list("Mammifères" = "mamm", "Mammifères marins" ="mamm_marins", "Oiseaux" = "oiseaux",
                                                           "Amphibiens" = "amph", "Reptiles" = "rept", "Poissons" = "poiss", "Arthropodes" = "arthr",
-                                                          "Invertébrés autre qu'arthropodes" = "autre_arthr", "Plantes vasculaires" = "plantes_vasc",
-                                                          "Plantes non-vasculaires" = "plantes_nonvasc", "Champignons, moisissures, levures" = "champ",
+                                                          "Invertébrés autres qu'arthropodes" = "autre_arthr", "Plantes vasculaires" = "plantes_vasc",
+                                                          "Plantes non vasculaires" = "plantes_nonvasc", "Champignons, moisissures, levures" = "champ",
                                                           "Organismes unicellulaires" = "unicell", "Bactéries" = "bact"), inline=TRUE),
 
                         ## Espèces à statut
@@ -89,8 +89,8 @@ shinyUI(fluidPage
 
                         ## Types de données
                         checkboxGroupInput("type", label = h5("Type(s) d'observations:"),
-                                           choices = list("Occurences" = "occur", "Abondances/Frequences" = "abond",
-                                                          "Données individuelles (Traits, Génétiques)" = "individu",
+                                           choices = list("occurrences" = "occur", "Abondances/Frequences" = "abond",
+                                                          "Données individuelles (traits, génétiques)" = "individu",
                                                           "Autres" = "autres_type"),inline=TRUE),
 
                         ## Autres types de données
@@ -110,7 +110,7 @@ shinyUI(fluidPage
 
                         conditionalPanel(
                            condition = "$.inArray('autres_finance', input.finance) > -1",
-                           textInput("autres_spec_finance", label = h5("Vous avez séléctionné 'Autres', veuillez préciser:"))
+                           textInput("autres_spec_finance", label = h5("Vous avez sélectionné 'Autres', veuillez préciser:"))
                            )
                       ),
 
