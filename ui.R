@@ -152,7 +152,13 @@ shinyUI(fluidPage
                       HTML("<hr width='75%'>"),
                       h4("Étape 5: Soumettre le formulaire"),
                       p("Lorsque vous avez ajouté toutes vos campagnes, veuillez soumettre votre formulaire à l'aide du bouton « Soumettre »",style="font-style:italic;font-size:13px;"),
-                      actionButton("submit", class = "btn-success", label = "Soumettre")),
+                      actionButton("submit", class = "btn-success", label = "Soumettre"),
+
+                      # Email in case of technical problem
+                      HTML("<hr width='75%'>"),
+                      h5("Si vous rencontrez un problème technique avec le formulaire, veuillez écrire à l'adresse suivante:", style = "font-weight:bold;font-style:italic;font-size:15px"),
+                      a("ielab@usherbrooke.ca", href = "mailto:ielab@usherbrooke.ca")
+                      ),
 
                       # MAP
                   mainPanel(
