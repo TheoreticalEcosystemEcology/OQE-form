@@ -133,7 +133,7 @@ shinyUI(fluidPage
 
                       # NEXT, PREVIOUS and ERASE BUTTON
                       HTML("<hr width='75%'>"),
-                      h4("Navigation entre les différentes pages"),
+                      h5("Navigation entre les différentes pages", style = "font-weight:bold"),
                       p("Vous pouvez visualiser chaque campagne en cliquant sur les boutons « Suivant » et « Précédent ».", style="font-style:italic;font-size:13px;"),
                       p("Si vous avez fait une erreur sur l'une des campagnes, veuillez effacer la page de cette campagne en cliquant sur « Effacer cette campagne ».", style="font-style:italic;font-size:13px;"),
                       tags$div(title = "Vous pouvez visualiser les différentes pages du formulaire que vous avez remplies.  Pour corriger l'une d'entre elles, veuillez cliquer sur « Effacer cette campagne » et compléter à nouveau les étapes 1 et 2 pour la même campagne.", align="center",
