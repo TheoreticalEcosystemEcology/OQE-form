@@ -35,8 +35,8 @@ shinyUI(fluidPage
                         condition = "input.shared == 1",
                         checkboxGroupInput("db", label = h5("Si oui, le(s)quel(s)?"),
                                            choices = list("Canadensys/GBIF" = "gbif", "DataONE" = "dataone", "Dryad" = "dryad", "Encyclopedia of Life (EOL)" = "eol",
-                                                          "(ESA) data.esa.org" = "esa", "Fig Share" = "fig", "Mangal" = "mangal", "Le Naturaliste" = "naturaliste",
-                                                          "Nordicana D" = "nordi", "Quebio" = "quebio", "Autres" = "autres_db"),inline=TRUE)),
+                                                          "(ESA) data.esa.org" = "esa", "Figshare" = "fig", "Mangal" = "mangal", "Le Naturaliste" = "naturaliste",
+                                                          "Nordicana D" = "nordi", "Quebio" = "quebio", "Polar Data Catalogue" = "pdc", "Autres" = "autres_db"),inline=TRUE)),
                       conditionalPanel(
                         condition = "$.inArray('autres_db', input.db) > -1",
                         textInput("autres_spec_db", label = h5("Vous avez sélectionné 'Autres', veuillez préciser:"))
@@ -115,7 +115,7 @@ shinyUI(fluidPage
                       ),
 
                       ## DOI
-                      tags$div(title = "Si vous avez plus d'un DOI, veuillez les séparer avec des point-virgules.", textInput("doi", label = h5("DOI de l'article ou des données liés à cette campagne:"))
+                      tags$div(title = "Si vous avez plus d'un DOI, veuillez les séparer avec des point-virgules.", textInput("doi", label = h5("DOI ou numéro de référence de l'article ou des données liés à cette campagne:"))
                       ),
 
                       ## Commentaires

@@ -11,7 +11,7 @@ df <- data.frame(sample = character(), yearBegin = character(), yearEnd = charac
     crsng = logical(), frqnt = logical(), autres_finance = logical(), autres_spec_finance = character(),
     doi = character(), shared = character(), gbif = logical(), dataone = logical(),
     dryad = logical(), eol = logical(), esa = logical(), fig = logical(), mangal = logical(),
-    naturaliste = logical(), nordi = logical(), quebio = logical(), autres_db = logical(),
+    naturaliste = logical(), nordi = logical(), quebio = logical(), pdc = logical(), autres_db = logical(),
     autres_spec_db = character(), comments = character(), stringsAsFactors = FALSE)
 
 # Références
@@ -20,14 +20,14 @@ status_ref <- colnames(df)[20:24]
 type_ref <- colnames(df)[26:29]
 enviro_ref <- colnames(df)[31:33]
 finance_ref <- colnames(df)[34:36]
-db_ref <- colnames(df)[40:50]
+db_ref <- colnames(df)[40:51]
 
 taxa_possib <- c("mamm", "mamm_marins", "oiseaux", "amph", "rept", "poiss", "arthr", "autre_arthr", "plantes_vasc", "plantes_nonvasc", "champ", "unicell", "bact")
 status_possib <- c("preoccupante", "menacee", "voie_disp", "commerciale", "autres_status")
 type_possib <- c("occur", "abond", "individu", "autres_type")
 enviro_possib <- c("aqua", "marin", "terre")
 finance_possib <- c("crsng", "frqnt", "autres_finance")
-db_possib <- c("gbif", "dataone", "dryad", "eol", "esa", "fig", "mangal", "naturaliste", "nordi", "quebio", "autres_db")
+db_possib <- c("gbif", "dataone", "dryad", "eol", "esa", "fig", "mangal", "naturaliste", "nordi", "quebio", "pdc", "autres_db")
 
 # References Edited and Deleted
 ids_edit <- c()
@@ -105,12 +105,12 @@ updateForm <- function(data) {
     # update db
     updateCheckboxGroupInput(session, "db", choices = list(`Canadensys/GBIF` = "gbif",
         DataONE = "dataone", Dryad = "dryad", `Encyclopedia of Life (EOL)` = "eol",
-        `(ESA) data.esa.org` = "esa", `Fig shared` = "fig", Mangal = "mangal", `Le Naturaliste` = "naturaliste",
-        `Nordicana D` = "nordi", Quebio = "quebio", Autres = "autres_db"), selected = db_possib[which(data[1,db_possib] == TRUE)], inline = TRUE)
+        `(ESA) data.esa.org` = "esa", `Figshare` = "fig", Mangal = "mangal", `Le Naturaliste` = "naturaliste",
+        `Nordicana D` = "nordi", Quebio = "quebio", `Polar Data Catalogue` = "pdc", Autres = "autres_db"), selected = db_possib[which(data[1,db_possib] == TRUE)], inline = TRUE)
 
     # update text input for 'other' option in db
-    updateTextInput(session, "autres_spec_db", value = paste(data[1, 51]))
+    updateTextInput(session, "autres_spec_db", value = paste(data[1, 52]))
 
     # update text area for comments section
-    updateTextAreaInput(session, "comments", value = paste(data[1, 52]))
+    updateTextAreaInput(session, "comments", value = paste(data[1, 53]))
 }

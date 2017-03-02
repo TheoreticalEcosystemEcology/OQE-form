@@ -85,9 +85,9 @@ shinyServer(function(input, output, session) {
         rec$form[1, 37] <- as.character(input$autres_spec_finance)
         rec$form[1, 38] <- as.character(input$doi)
         rec$form[1, 39] <- input$shared
-        rec$form[1, 40:50] <- db_ref %in% input$db
-        rec$form[1, 51] <- as.character(input$autres_spec_db)
-        rec$form[1, 52] <- as.character(input$comments)
+        rec$form[1, 40:51] <- db_ref %in% input$db
+        rec$form[1, 52] <- as.character(input$autres_spec_db)
+        rec$form[1, 53] <- as.character(input$comments)
 
         # Liste des réponses
         response <- list(form = rec$form, map = rec$map)
